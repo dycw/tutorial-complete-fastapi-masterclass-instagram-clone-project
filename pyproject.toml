@@ -14,6 +14,7 @@ python = "^3.10"
 beartype = "^0.10.4"
 fastapi = "0.75.2"
 gunicorn = "^20.0.4"
+sqlalchemy = "^1.4.36"
 strenum = "^0.4.7"
 uvicorn = { version = "^0.17.6", extras = ["standard"] }
 
