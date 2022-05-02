@@ -9,6 +9,7 @@ from app.db.database import get_db
 from app.db.db_user import create_user
 from app.db.models import DbUser
 from app.schemas import UserBase
+from app.schemas import UserDisplay
 
 
 router = user_router = APIRouter(prefix="/user", tags=["user"])
@@ -17,7 +18,7 @@ router = user_router = APIRouter(prefix="/user", tags=["user"])
 # Create
 
 
-@router.post("/")
+@router.post("/", response_model=UserDisplay)
 @beartype
 def _(
     *, db: AbstractContextManager[Session] = Depends(get_db), request: UserBase
