@@ -18,17 +18,29 @@ def _() -> JSONResponse:
     return JSONResponse({"Hello": "World"})
 
 
-@app.get("/blog/all/")
+@app.get(
+    "/blog/all/",
+    tags=["blog"],
+    summary="Retrieve all blogs",
+    description="This API call simulates fetching all blogs",
+)
 @beartype
 def _(*, page: int = 1, page_size: int | None = None) -> JSONResponse:
     return JSONResponse({"message": f"All {page_size} blogs on page {page}"})
 
 
-@app.get("/blog/{id}/comments/{comment_id}")
+@app.get("/blog/{id}/comments/{comment_id}", tags=["blog", "comment"])
 @beartype
 def _(
     *, id: int, comment_id: int, valid: bool = True, username: str | None = None
 ) -> JSONResponse:
+    """Simulates rteieving a comment of a blog
+
+    - **id** mandatory path parameter
+    - **comment_id** mandatory path parameter
+    - **valid** optional query parameter
+    - **username** optional query parameter
+    """
     return JSONResponse(
         {"message": f"blog_id {id}, {comment_id=}, {valid=}, {username=}"}
     )
@@ -40,13 +52,13 @@ class BlogType(StrEnum):
     howto = auto()
 
 
-@app.get("/blog/type/{type}/")
+@app.get("/blog/type/{type}/", tags=["blog"])
 @beartype
 def _(*, type: BlogType) -> JSONResponse:
     return JSONResponse({"message": f"Blog type {type}"})
 
 
-@app.get("/blog/{id}/", status_code=HTTP_200_OK)
+@app.get("/blog/{id}/", status_code=HTTP_200_OK, tags=["blog"])
 @beartype
 def _(*, response: Response, id: int) -> JSONResponse:
     if id > 5:
