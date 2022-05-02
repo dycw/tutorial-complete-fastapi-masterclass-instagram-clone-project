@@ -1,7 +1,9 @@
 from collections.abc import Iterator
+from contextlib import contextmanager
 
 from beartype import beartype
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -16,8 +18,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
+@contextmanager
 @beartype
-def get_db() -> Iterator[int]:
+def get_db() -> Iterator[Session]:
     db = SessionLocal()
     try:
         yield db

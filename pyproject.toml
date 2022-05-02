@@ -11,9 +11,11 @@ authors = ["Derek Wan <d.wan@icloud.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+bcrypt = "^3.2.2"
 beartype = "^0.10.4"
 fastapi = "0.75.2"
 gunicorn = "^20.0.4"
+passlib = "^1.7.4"
 sqlalchemy = "^1.4.36"
 strenum = "^0.4.7"
 uvicorn = { version = "^0.17.6", extras = ["standard"] }
