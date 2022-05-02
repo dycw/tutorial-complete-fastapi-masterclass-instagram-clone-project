@@ -13,7 +13,7 @@ router = blog_get_router = APIRouter(prefix="/blog", tags=["blog"])
 
 
 @router.get(
-    "/all/",
+    "/all",
     summary="Retrieve all blogs",
     description="This API call simulates fetching all blogs",
     response_description="The list of available blogs",
@@ -47,13 +47,13 @@ class BlogType(StrEnum):
     howto = auto()
 
 
-@router.get("/type/{type}/")
+@router.get("/type/{type}")
 @beartype
 def _(*, type: BlogType) -> JSONResponse:
     return JSONResponse({"message": f"Blog type {type}"})
 
 
-@router.get("/{id}/", status_code=HTTP_200_OK)
+@router.get("/{id}", status_code=HTTP_200_OK)
 @beartype
 def _(*, response: Response, id: int) -> JSONResponse:
     if id > 5:
