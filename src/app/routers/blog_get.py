@@ -3,10 +3,13 @@ from typing import Any
 
 from beartype import beartype
 from fastapi import APIRouter
+from fastapi import Depends
 from fastapi.responses import Response
 from starlette.status import HTTP_200_OK
 from starlette.status import HTTP_404_NOT_FOUND
 from strenum import StrEnum
+
+from app.routers.blog_post import required_functionality
 
 
 router = blog_get_router = APIRouter(prefix="/blog", tags=["blog"])
@@ -19,8 +22,16 @@ router = blog_get_router = APIRouter(prefix="/blog", tags=["blog"])
     response_description="The list of available blogs",
 )
 @beartype
-def _(*, page: int = 1, page_size: int | None = None) -> dict[str, Any]:
-    return {"message": f"All {page_size} blogs on page {page}"}
+def _(
+    *,
+    page: int = 1,
+    page_size: int | None = None,
+    req_parameter: dict[str, str] = Depends(required_functionality),
+) -> dict[str, Any]:
+    return {
+        "message": f"All {page_size} blogs on page {page}",
+        "req_parameter": req_parameter,
+    }
 
 
 @router.get("/{id}/comments/{comment_id}", tags=["comment"])
