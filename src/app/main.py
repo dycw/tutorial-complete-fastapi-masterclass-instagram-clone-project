@@ -2,7 +2,7 @@ from beartype import beartype
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from router.blog_get import blog_get_router
+from app.routers.blog_get import blog_get_router
 
 
 app = FastAPI()

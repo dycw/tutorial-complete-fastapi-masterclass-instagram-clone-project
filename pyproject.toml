@@ -63,7 +63,6 @@ atomic = true
 case_sensitive = true
 float_to_top = true
 force_single_line = true
-known_first_party = ["router"]
 line_length = 80
 lines_after_imports = 2
 profile = "black"
@@ -72,8 +71,8 @@ virtual_env = ".venv/bin/python"
 
 #### pyright ##################################################################
 [tool.pyright]
-include = ["app", "tests"]
-executionEnvironments = [{ root = "app" }]
+include = ["src"]
+executionEnvironments = [{ root = "src" }]
 typeCheckingMode = "strict"
 reportMissingTypeArgument = false
 reportMissingTypeStubs = false
@@ -92,7 +91,7 @@ reportUnusedCallResult = "error"
 [tool.pytest.ini_options]
 addopts = ["-rsxX", "--color=auto", "--strict-markers"]
 filterwarnings = ["error", "ignore::DeprecationWarning"]
-looponfailroots = ["app", "tests"]
+looponfailroots = ["src"]
 minversion = "7.0"
-testpaths = "tests"
+testpaths = ["src/tests"]
 xfail_strict = true
