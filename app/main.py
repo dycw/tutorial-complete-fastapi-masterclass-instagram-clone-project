@@ -23,6 +23,7 @@ def _() -> JSONResponse:
     tags=["blog"],
     summary="Retrieve all blogs",
     description="This API call simulates fetching all blogs",
+    response_description="The list of available blogs",
 )
 @beartype
 def _(*, page: int = 1, page_size: int | None = None) -> JSONResponse:
@@ -41,6 +42,7 @@ def _(
     - **valid** optional query parameter
     - **username** optional query parameter
     """
+
     return JSONResponse(
         {"message": f"blog_id {id}, {comment_id=}, {valid=}, {username=}"}
     )
