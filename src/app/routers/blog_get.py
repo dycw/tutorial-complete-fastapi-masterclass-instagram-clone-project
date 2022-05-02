@@ -1,7 +1,7 @@
 from enum import auto
 
 from beartype import beartype
-from fastapi import FastAPI
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.responses import Response
 from starlette.status import HTTP_200_OK
@@ -9,18 +9,11 @@ from starlette.status import HTTP_404_NOT_FOUND
 from strenum import StrEnum
 
 
-app = FastAPI()
+router = blog_get_router = APIRouter(prefix="/blog", tags=["blog"])
 
 
-@app.get("/hello/")
-@beartype
-def _() -> JSONResponse:
-    return JSONResponse({"Hello": "World"})
-
-
-@app.get(
-    "/blog/all/",
-    tags=["blog"],
+@router.get(
+    "/all",
     summary="Retrieve all blogs",
     description="This API call simulates fetching all blogs",
     response_description="The list of available blogs",
@@ -30,7 +23,7 @@ def _(*, page: int = 1, page_size: int | None = None) -> JSONResponse:
     return JSONResponse({"message": f"All {page_size} blogs on page {page}"})
 
 
-@app.get("/blog/{id}/comments/{comment_id}", tags=["blog", "comment"])
+@router.get("/{id}/comments/{comment_id}", tags=["comment"])
 @beartype
 def _(
     *, id: int, comment_id: int, valid: bool = True, username: str | None = None
@@ -54,13 +47,13 @@ class BlogType(StrEnum):
     howto = auto()
 
 
-@app.get("/blog/type/{type}/", tags=["blog"])
+@router.get("/type/{type}")
 @beartype
 def _(*, type: BlogType) -> JSONResponse:
     return JSONResponse({"message": f"Blog type {type}"})
 
 
-@app.get("/blog/{id}/", status_code=HTTP_200_OK, tags=["blog"])
+@router.get("/{id}", status_code=HTTP_200_OK)
 @beartype
 def _(*, response: Response, id: int) -> JSONResponse:
     if id > 5:

@@ -71,8 +71,8 @@ virtual_env = ".venv/bin/python"
 
 #### pyright ##################################################################
 [tool.pyright]
-include = ["app", "tests"]
-executionEnvironments = [{ root = "app" }]
+include = ["src"]
+executionEnvironments = [{ root = "src" }]
 typeCheckingMode = "strict"
 reportMissingTypeArgument = false
 reportMissingTypeStubs = false
@@ -91,7 +91,7 @@ reportUnusedCallResult = "error"
 [tool.pytest.ini_options]
 addopts = ["-rsxX", "--color=auto", "--strict-markers"]
 filterwarnings = ["error", "ignore::DeprecationWarning"]
-looponfailroots = ["app", "tests"]
+looponfailroots = ["src"]
 minversion = "7.0"
-testpaths = "tests"
+testpaths = ["src/tests"]
 xfail_strict = true
