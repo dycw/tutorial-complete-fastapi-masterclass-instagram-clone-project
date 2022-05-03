@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from fastapi.param_functions import Depends
 from sqlalchemy.orm import Session
 
-from app.db.database import get_db
+from app.db.database import yield_db
 from app.db.db_user import create_user
 from app.db.db_user import delete_user
 from app.db.db_user import get_all_users
@@ -25,7 +25,9 @@ router = user_router = APIRouter(prefix="/user", tags=["user"])
 @router.post("/", response_model=UserDisplay)
 @beartype
 def _(
-    *, db: AbstractContextManager[Session] = Depends(get_db), request: UserBase
+    *,
+    db: AbstractContextManager[Session] = Depends(yield_db),
+    request: UserBase,
 ) -> DbUser:
     return create_user(db=db, request=request)
 
@@ -35,14 +37,16 @@ def _(
 
 @router.get("/", response_model=list[UserDisplay])
 @beartype
-def _(*, db: AbstractContextManager[Session] = Depends(get_db)) -> list[DbUser]:
+def _(
+    *, db: AbstractContextManager[Session] = Depends(yield_db)
+) -> list[DbUser]:
     return get_all_users(db=db)
 
 
 @router.get("/{id}", response_model=UserDisplay)
 @beartype
 def _(
-    *, db: AbstractContextManager[Session] = Depends(get_db), id: int
+    *, db: AbstractContextManager[Session] = Depends(yield_db), id: int
 ) -> DbUser | None:
     return get_user(db=db, id=id)
 
@@ -54,7 +58,7 @@ def _(
 @beartype
 def _(
     *,
-    db: AbstractContextManager[Session] = Depends(get_db),
+    db: AbstractContextManager[Session] = Depends(yield_db),
     id: int,
     request: UserBase,
 ) -> bool:
@@ -67,6 +71,6 @@ def _(
 @router.post("/delete/{id}")
 @beartype
 def _(
-    *, db: AbstractContextManager[Session] = Depends(get_db), id: int
+    *, db: AbstractContextManager[Session] = Depends(yield_db), id: int
 ) -> bool:
     return delete_user(db=db, id=id)
