@@ -7,6 +7,10 @@ from sqlalchemy.orm import Session
 
 from app.db.database import get_db
 from app.db.db_user import create_user
+from app.db.db_user import delete_user
+from app.db.db_user import get_all_users
+from app.db.db_user import get_user
+from app.db.db_user import update_user
 from app.db.models import DbUser
 from app.schemas import UserBase
 from app.schemas import UserDisplay
@@ -29,6 +33,40 @@ def _(
 # Read
 
 
+@router.get("/", response_model=list[UserDisplay])
+@beartype
+def _(*, db: AbstractContextManager[Session] = Depends(get_db)) -> list[DbUser]:
+    return get_all_users(db=db)
+
+
+@router.get("/{id}", response_model=UserDisplay)
+@beartype
+def _(
+    *, db: AbstractContextManager[Session] = Depends(get_db), id: int
+) -> DbUser | None:
+    return get_user(db=db, id=id)
+
+
 # Update
 
+
+@router.post("/{id}")
+@beartype
+def _(
+    *,
+    db: AbstractContextManager[Session] = Depends(get_db),
+    id: int,
+    request: UserBase,
+) -> bool:
+    return update_user(db=db, id=id, request=request)
+
+
 # Delete
+
+
+@router.post("/delete/{id}")
+@beartype
+def _(
+    *, db: AbstractContextManager[Session] = Depends(get_db), id: int
+) -> bool:
+    return delete_user(db=db, id=id)
