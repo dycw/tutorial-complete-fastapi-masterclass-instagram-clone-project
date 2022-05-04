@@ -17,7 +17,7 @@ def create_sqlite_engine_and_session_cm(
 ) -> tuple[Engine, Callable[..., AbstractContextManager[Session]]]:
     url = f"sqlite:///{path}"
     engine = create_engine(url, connect_args={"check_same_thread": False})
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
     @contextmanager
     @beartype
