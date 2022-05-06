@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.db_article import create_article
 from app.db.db_article import get_article
 from app.db.engines import yield_sess
-from app.db.models import DbArticle
+from app.db.schemas.users import DbArticle
 from app.schemas import ArticleBase
 from app.schemas import ArticleDisplay
 

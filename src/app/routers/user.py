@@ -9,7 +9,7 @@ from app.db.db_user import get_all_users
 from app.db.db_user import get_user
 from app.db.db_user import update_user
 from app.db.engines import yield_sess
-from app.db.models import DbUser
+from app.db.schemas.users import DbUser
 from app.schemas import UserBase
 from app.schemas import UserDisplay
 
