@@ -12,7 +12,7 @@ from strenum import StrEnum
 from app.routers.blog_post import required_functionality
 
 
-router = blog_get_router = APIRouter(prefix="/blog", tags=["blog"])
+router = APIRouter(prefix="/blog", tags=["blog"])
 
 
 @router.get(

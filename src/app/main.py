@@ -1,18 +1,20 @@
 from beartype import beartype
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 
-from app.db.database import ENGINE
-from app.db.models import Base
-from app.init.setup import create_app
+from app.routers import article
+from app.routers import blog_get
+from app.routers import blog_post
+from app.routers import user
+
+
+@beartype
+def create_app() -> FastAPI:
+    app = FastAPI()
+    app.include_router(user.router)
+    app.include_router(article.router)
+    app.include_router(blog_get.router)
+    app.include_router(blog_post.router)
+    return app
 
 
 app = create_app()
-
-
-@app.get("/hello/")
-@beartype
-def _() -> JSONResponse:
-    return JSONResponse({"Hello": "World"})
-
-
-Base.metadata.create_all(ENGINE)

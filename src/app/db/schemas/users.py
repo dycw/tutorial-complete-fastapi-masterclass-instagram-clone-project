@@ -5,7 +5,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
-from app.db.database import Base
+from app.db.schemas.base import Base
 
 
 class DbUser(Base):
@@ -28,4 +28,4 @@ class DbArticle(Base):
     published = Column(Boolean)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    user = relationship("DbUser", back_populates="item")
+    user = relationship("DbUser", back_populates="items")

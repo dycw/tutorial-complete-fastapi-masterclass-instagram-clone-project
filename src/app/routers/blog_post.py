@@ -8,7 +8,7 @@ from fastapi import Query
 from pydantic import BaseModel
 
 
-router = blog_post_router = APIRouter(prefix="/blog", tags=["blog"])
+router = APIRouter(prefix="/blog", tags=["blog"])
 
 
 class Image(BaseModel):
