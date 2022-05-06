@@ -14,7 +14,7 @@ from app.schemas import UserBase
 from app.schemas import UserDisplay
 
 
-router = user_router = APIRouter(prefix="/user", tags=["user"])
+router = APIRouter(prefix="/user", tags=["user"])
 
 
 # Create

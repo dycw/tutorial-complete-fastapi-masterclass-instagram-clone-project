@@ -11,7 +11,7 @@ from app.schemas import ArticleBase
 from app.schemas import ArticleDisplay
 
 
-router = article_router = APIRouter(prefix="/article", tags=["article"])
+router = APIRouter(prefix="/article", tags=["article"])
 
 
 # Create article
