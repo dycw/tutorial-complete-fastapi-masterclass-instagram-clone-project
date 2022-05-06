@@ -9,4 +9,4 @@ def test_post(test_client: TestClient) -> None:
         "/user/", json={"username": "u", "email": "e", "password": "p"}
     )
     assert r.status_code == HTTP_200_OK, r.text
-    assert r.json() == {"Hello": "World"}
+    assert set(r.json()) == {"username", "email", "items"}
