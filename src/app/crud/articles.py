@@ -2,7 +2,7 @@ from beartype import beartype
 from sqlalchemy.orm import Session
 
 from app.db.schemas.users import DbArticle
-from app.schemas import ArticleBase
+from app.models.main import ArticleBase
 
 
 @beartype

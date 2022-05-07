@@ -1,14 +1,14 @@
 from beartype import beartype
-from fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from app.db.db_article import create_article
-from app.db.db_article import get_article
+from app.crud.articles import create_article
+from app.crud.articles import get_article
 from app.db.engines import yield_sess
 from app.db.schemas.users import DbArticle
-from app.schemas import ArticleBase
-from app.schemas import ArticleDisplay
+from app.models.main import ArticleBase
+from app.models.main import ArticleDisplay
+from app.utilities.routers import APIRouter
 
 
 router = APIRouter(prefix="/article", tags=["article"])
