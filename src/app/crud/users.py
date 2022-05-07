@@ -32,7 +32,7 @@ def get_user(*, sess: Session, id: int) -> DbUser | None:
 @beartype
 def update_user(*, sess: Session, id: int, request: UserBase) -> bool:
     user = sess.query(DbUser).filter(DbUser.id == id)
-    user.update(
+    _ = user.update(
         {
             DbUser.username: request.username,
             DbUser.email: request.email,

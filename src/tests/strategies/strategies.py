@@ -1,16 +1,18 @@
 from collections.abc import Iterator
-from contextlib import AbstractContextManager
-from contextlib import contextmanager
 from pathlib import Path
-from tempfile import TemporaryDirectory
-from typing import Any
+from typing import Union
 
 from beartype import beartype
+from dycw_utilities.hypothesis import draw_and_map
+from dycw_utilities.hypothesis.sqlalchemy import (
+    sqlite_engines as _sqlite_engines,
+)
+from dycw_utilities.hypothesis.tempfile import temp_dirs
+from dycw_utilities.hypothesis.typing import MaybeSearchStrategy
+from dycw_utilities.tempfile import TemporaryDirectory
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from hypothesis.strategies import DrawFn
-from hypothesis.strategies import composite
-from sqlalchemy import create_engine
+from hypothesis.strategies import SearchStrategy
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
@@ -20,80 +22,51 @@ from app.db.schemas.all import Base
 from app.main import create_app
 
 
-@composite
-def temp_dirs(
-    _: Any, /, *, path: Path | None = None
-) -> AbstractContextManager[Path]:
-    """Strategy for generating temporary directories."""
-
-    @contextmanager
-    @beartype
-    def cm() -> Iterator[Path]:
-        if path is None:
-            with TemporaryDirectory() as temp:
-                yield Path(temp)
-        else:
-            yield path
-
-    return cm()
-
-
-@composite
-def engines(
-    draw: DrawFn, /, *, path: Path | None = None
-) -> AbstractContextManager[Engine]:
+@beartype
+def sqlite_engines(
+    *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
+) -> SearchStrategy[Engine]:
     """Strategy for generating SQLAlchemy engines."""
 
-    @contextmanager
     @beartype
-    def cm() -> Iterator[Engine]:
-        with draw(temp_dirs(path=path)) as temp_dir:
-            engine = create_engine(f"sqlite:///{temp_dir}/db.sqlite")
-            with engine.begin() as conn:
-                Base.metadata.create_all(bind=conn)
-            yield engine
+    def post_init(engine: Engine, /) -> None:
+        with engine.begin() as conn:
+            Base.metadata.create_all(bind=conn)  # type: ignore
 
-    return cm()
+    return _sqlite_engines(dir=dir, post_init=post_init)
 
 
-@composite
+@beartype
 def apps(
-    draw: DrawFn, /, *, path: Path | None = None
-) -> AbstractContextManager[FastAPI]:
+    *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
+) -> SearchStrategy[FastAPI]:
     """Strategy for generating FastAPI applications."""
 
-    @contextmanager
+    app = create_app()
+
     @beartype
-    def cm() -> Iterator[FastAPI]:
-        app = create_app()
-        with draw(engines(path=path)) as engine:
-            TestSession = sessionmaker(
-                bind=engine, autoflush=False, autocommit=False
-            )
+    def inner(engine: Engine, /) -> FastAPI:
+        TestSession = sessionmaker(
+            bind=engine, autoflush=False, autocommit=False
+        )
 
-            def yield_test_sess() -> Iterator[Session]:
-                db = TestSession()
-                try:
-                    yield db
-                finally:
-                    db.close()
+        def yield_test_sess() -> Iterator[Session]:  # do not beartype
+            db = TestSession()
+            try:
+                yield db
+            finally:
+                db.close()
 
-            app.dependency_overrides[yield_sess] = yield_test_sess
-            yield app
+        app.dependency_overrides[yield_sess] = yield_test_sess
+        return app
 
-    return cm()
+    return draw_and_map(inner, sqlite_engines(dir=dir))
 
 
-@composite
+@beartype
 def clients(
-    draw: DrawFn, /, *, path: Path | None = None
-) -> AbstractContextManager[TestClient]:
+    *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
+) -> SearchStrategy[TestClient]:
     """Strategy for generating Starlette test clients."""
 
-    @contextmanager
-    @beartype
-    def cm() -> Iterator[TestClient]:
-        with draw(apps(path=path)) as app:
-            yield TestClient(app)
-
-    return cm()
+    return apps(dir=dir).map(TestClient)
