@@ -1,17 +1,17 @@
 from beartype import beartype
-from fastapi import APIRouter
 from fastapi.param_functions import Depends
 from sqlalchemy.orm import Session
 
-from app.db.db_user import create_user
-from app.db.db_user import delete_user
-from app.db.db_user import get_all_users
-from app.db.db_user import get_user
-from app.db.db_user import update_user
+from app.crud.users import create_user
+from app.crud.users import delete_user
+from app.crud.users import get_all_users
+from app.crud.users import get_user
+from app.crud.users import update_user
 from app.db.engines import yield_sess
 from app.db.schemas.users import DbUser
-from app.schemas import UserBase
-from app.schemas import UserDisplay
+from app.models.main import UserBase
+from app.models.main import UserDisplay
+from app.utilities.routers import APIRouter
 
 
 router = APIRouter(prefix="/user", tags=["user"])

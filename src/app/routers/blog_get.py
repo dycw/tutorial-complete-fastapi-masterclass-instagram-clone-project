@@ -2,7 +2,6 @@ from enum import auto
 from typing import Any
 
 from beartype import beartype
-from fastapi import APIRouter
 from fastapi import Depends
 from fastapi.responses import Response
 from starlette.status import HTTP_200_OK
@@ -10,6 +9,7 @@ from starlette.status import HTTP_404_NOT_FOUND
 from strenum import StrEnum
 
 from app.routers.blog_post import required_functionality
+from app.utilities.routers import APIRouter
 
 
 router = APIRouter(prefix="/blog", tags=["blog"])

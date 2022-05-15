@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import EmailStr
 
 
 class Article(BaseModel):
@@ -12,13 +13,13 @@ class Article(BaseModel):
 
 class UserBase(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     password: str
 
 
 class UserDisplay(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     items: list[Article] = []
 
     class Config:

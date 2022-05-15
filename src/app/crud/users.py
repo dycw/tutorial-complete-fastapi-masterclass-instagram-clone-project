@@ -1,9 +1,9 @@
 from beartype import beartype
 from sqlalchemy.orm import Session
 
-from app.db.hash import Hash
 from app.db.schemas.users import DbUser
-from app.schemas import UserBase
+from app.models.main import UserBase
+from app.utilities.hash import Hash
 
 
 @beartype
