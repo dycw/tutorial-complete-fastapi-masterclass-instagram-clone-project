@@ -37,8 +37,20 @@ def test_get(client: TestClient) -> None:
     assert r.json() == []
 
 
+@given(client=clients(), user=users_base())
+def test_get_detail_existing(client: TestClient, user: UserBase) -> None:
+    _ = client.post("/user/", data=user.json())
+    r = client.get("/user/1")
+    assert r.status_code == HTTP_200_OK, r.text
+    assert r.json() == {
+        "username": user.username,
+        "email": user.email,
+        "items": [],
+    }
+
+
 @given(client=clients())
-def test_get_detail(client: TestClient) -> None:
+def test_get_detail_non_existent(client: TestClient) -> None:
     r = client.get("/user/1")
     assert r.status_code == HTTP_200_OK, r.text
     assert r.json() is None

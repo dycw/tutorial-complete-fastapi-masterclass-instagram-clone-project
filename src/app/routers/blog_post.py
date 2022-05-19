@@ -1,6 +1,5 @@
 from typing import Any
 
-from beartype import beartype
 from fastapi import Body
 from fastapi import Path
 from fastapi import Query
@@ -28,13 +27,11 @@ class BlogModel(BaseModel):
 
 
 @router.post("/new/{id}")
-@beartype
 def _(*, blog: BlogModel, id: int, version: int = 1) -> dict[str, Any]:
     return {"blog": blog, "id": id, "version": version}
 
 
 @router.post("/new/{id}/comment")
-@beartype
 def _(
     *,
     blog: BlogModel,
@@ -60,6 +57,5 @@ def _(
     }
 
 
-@beartype
 def required_functionality() -> dict[str, str]:
     return {"message": "Learning FastAPI is important"}

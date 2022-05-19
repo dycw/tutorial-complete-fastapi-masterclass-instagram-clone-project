@@ -1,4 +1,3 @@
-from beartype import beartype
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -18,7 +17,6 @@ router = APIRouter(prefix="/article", tags=["article"])
 
 
 @router.post("/", response_model=ArticleDisplay)
-@beartype
 def _(
     *, sess: Session = Depends(yield_sess), request: ArticleBase
 ) -> DbArticle:
@@ -29,6 +27,5 @@ def _(
 
 
 @router.get("/{id}", response_model=ArticleDisplay)
-@beartype
 def _(*, sess: Session = Depends(yield_sess), id: int) -> DbArticle | None:
     return get_article(sess=sess, id=id)

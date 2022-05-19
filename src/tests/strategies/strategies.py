@@ -2,7 +2,6 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Union
 
-from beartype import beartype
 from dycw_utilities.hypothesis import draw_and_map
 from dycw_utilities.hypothesis.sqlalchemy import (
     sqlite_engines as _sqlite_engines,
@@ -22,13 +21,11 @@ from app.db.schemas.all import Base
 from app.main import create_app
 
 
-@beartype
 def sqlite_engines(
     *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
 ) -> SearchStrategy[Engine]:
     """Strategy for generating SQLAlchemy engines."""
 
-    @beartype
     def post_init(engine: Engine, /) -> None:
         with engine.begin() as conn:
             Base.metadata.create_all(bind=conn)  # type: ignore
@@ -36,7 +33,6 @@ def sqlite_engines(
     return _sqlite_engines(dir=dir, post_init=post_init)
 
 
-@beartype
 def apps(
     *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
 ) -> SearchStrategy[FastAPI]:
@@ -44,7 +40,6 @@ def apps(
 
     app = create_app()
 
-    @beartype
     def inner(engine: Engine, /) -> FastAPI:
         TestSession = sessionmaker(
             bind=engine, autoflush=False, autocommit=False
@@ -63,7 +58,6 @@ def apps(
     return draw_and_map(inner, sqlite_engines(dir=dir))
 
 
-@beartype
 def clients(
     *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
 ) -> SearchStrategy[TestClient]:
