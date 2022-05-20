@@ -1,6 +1,5 @@
 from collections.abc import Iterator
 
-from beartype import beartype
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
@@ -12,7 +11,6 @@ SessionLocal = sessionmaker(
 )
 
 
-@beartype
 def yield_sess() -> Iterator[Session]:  # pragma: no cover
     db = SessionLocal()
     try:

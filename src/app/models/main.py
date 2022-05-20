@@ -26,9 +26,12 @@ class UserDisplay(BaseModel):
         orm_mode = True
 
 
-class User(BaseModel):
+class User(BaseModel):  # user inside ArticleBase
     id: int
     username: str
+
+    class Config:
+        orm_mode = True
 
 
 class ArticleBase(BaseModel):
@@ -42,7 +45,6 @@ class ArticleDisplay(BaseModel):
     title: str
     content: str
     published: bool
-    creator: int
     user: User
 
     class Config:

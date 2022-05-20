@@ -1,7 +1,6 @@
 from enum import auto
 from typing import Any
 
-from beartype import beartype
 from fastapi import Depends
 from fastapi.responses import Response
 from starlette.status import HTTP_200_OK
@@ -21,7 +20,6 @@ router = APIRouter(prefix="/blog", tags=["blog"])
     description="This API call simulates fetching all blogs",
     response_description="The list of available blogs",
 )
-@beartype
 def _(
     *,
     page: int = 1,
@@ -35,7 +33,6 @@ def _(
 
 
 @router.get("/{id}/comments/{comment_id}", tags=["comment"])
-@beartype
 def _(
     *, id: int, comment_id: int, valid: bool = True, username: str | None = None
 ) -> dict[str, Any]:
@@ -57,13 +54,11 @@ class BlogType(StrEnum):
 
 
 @router.get("/type/{type}")
-@beartype
 def _(*, type: BlogType) -> dict[str, Any]:
     return {"message": f"Blog type {type}"}
 
 
 @router.get("/{id}", status_code=HTTP_200_OK)
-@beartype
 def _(*, response: Response, id: int) -> dict[str, Any]:
     if id > 5:
         response.status_code = HTTP_404_NOT_FOUND

@@ -1,4 +1,3 @@
-from beartype import beartype
 from fastapi import FastAPI
 
 from app.routers import article
@@ -7,7 +6,6 @@ from app.routers import blog_post
 from app.routers import user
 
 
-@beartype
 def create_app() -> FastAPI:
     app = FastAPI()
     app.include_router(user.router)

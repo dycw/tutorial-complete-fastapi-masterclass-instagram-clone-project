@@ -1,4 +1,3 @@
-from beartype import beartype
 from fastapi.param_functions import Depends
 from sqlalchemy.orm import Session
 
@@ -17,45 +16,40 @@ from app.utilities.routers import APIRouter
 router = APIRouter(prefix="/user", tags=["user"])
 
 
-# Create
+# create
 
 
 @router.post("/", response_model=UserDisplay)
-@beartype
 def _(*, sess: Session = Depends(yield_sess), request: UserBase) -> DbUser:
     return create_user(sess=sess, request=request)
 
 
-# Read
+# read
 
 
 @router.get("/", response_model=list[UserDisplay])
-@beartype
 def _(*, sess: Session = Depends(yield_sess)) -> list[DbUser]:
     return get_all_users(sess=sess)
 
 
 @router.get("/{id}", response_model=UserDisplay)
-@beartype
 def _(*, sess: Session = Depends(yield_sess), id: int) -> DbUser | None:
     return get_user(sess=sess, id=id)
 
 
-# Update
+# update
 
 
 @router.post("/{id}")
-@beartype
 def _(
     *, sess: Session = Depends(yield_sess), id: int, request: UserBase
 ) -> bool:
     return update_user(sess=sess, id=id, request=request)
 
 
-# Delete
+# delete
 
 
 @router.post("/delete/{id}")
-@beartype
 def _(*, sess: Session = Depends(yield_sess), id: int) -> bool:
     return delete_user(sess=sess, id=id)

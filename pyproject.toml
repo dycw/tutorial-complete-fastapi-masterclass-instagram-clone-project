@@ -47,12 +47,11 @@ authors = ["Derek Wan <d.wan@icloud.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 bcrypt = "^3.2.2"
-beartype = "^0.10.4"
-dycw-utilities = "^0.1.12"
+dycw-utilities = "^0.1.13"
 fastapi = "0.78.0"
 gunicorn = "^20.0.4"
 passlib = "^1.7.4"
-pydantic = { version = "^1.9.0", extras = ["email"] }
+pydantic = { version = "^1.9.1", extras = ["email"] }
 sqlalchemy = "^1.4.36"
 strenum = "^0.4.7"
 uvicorn = { version = "^0.17.6", extras = ["standard"] }
@@ -65,7 +64,7 @@ flake8-absolute-import = "^1.0.0.1"
 flake8-annotations = "^2.9.0"
 flake8-bandit = "^3.0.0"
 flake8-bugbear = "^22.4.25"
-flake8-comprehensions = "^3.9.0"
+flake8-comprehensions = "^3.10.0"
 flake8-debugger = "^4.0.0"
 flake8-eradicate = "^1.2.1"
 flake8-no-pep420 = "^2.3.0"
@@ -73,7 +72,7 @@ flake8-pie = "^0.15.0"
 flake8-print = "^5.0.0"
 flake8-simplify = "^0.19.2"
 flake8-unused-arguments = "^0.0.10"
-hypothesis = "^6.46.6"
+hypothesis = "^6.46.7"
 hypothesis-faker = "^0.1.13"
 isort = "^5.10.1"
 poetry-deps-scanner = "^1.0.1"
@@ -108,7 +107,12 @@ reportUnusedCallResult = "error"
 
 #### pytest ###################################################################
 [tool.pytest.ini_options]
-addopts = ["-rsxX", "--color=auto", "--strict-markers"]
+addopts = [
+  "-rsxX",
+  "--color=auto",
+  "--strict-markers",
+  "--typeguard-packages=app"
+]
 filterwarnings = ["error", "ignore::DeprecationWarning"]
 minversion = "7.0"
 testpaths = ["src/tests"]
