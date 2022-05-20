@@ -13,7 +13,7 @@ from app.utilities.routers import APIRouter
 router = APIRouter(prefix="/article", tags=["article"])
 
 
-# Create article
+# create
 
 
 @router.post("/", response_model=ArticleDisplay)
@@ -23,7 +23,7 @@ def _(
     return create_article(sess=sess, request=request)
 
 
-# Get specific article
+# read
 
 
 @router.get("/{id}", response_model=ArticleDisplay)

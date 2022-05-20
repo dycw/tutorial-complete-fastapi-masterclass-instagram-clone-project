@@ -5,6 +5,9 @@ from app.models.main import UserBase
 from app.utilities.hash import Hash
 
 
+# create
+
+
 def create_user(*, sess: Session, request: UserBase) -> DbUser:
     new_user = DbUser(
         username=request.username,
@@ -17,12 +20,18 @@ def create_user(*, sess: Session, request: UserBase) -> DbUser:
     return new_user
 
 
+# read
+
+
 def get_all_users(*, sess: Session) -> list[DbUser]:
     return sess.query(DbUser).all()
 
 
 def get_user(*, sess: Session, id: int) -> DbUser | None:
     return sess.query(DbUser).filter(DbUser.id == id).first()
+
+
+# update
 
 
 def update_user(*, sess: Session, id: int, request: UserBase) -> bool:
@@ -36,6 +45,9 @@ def update_user(*, sess: Session, id: int, request: UserBase) -> bool:
     )
     sess.commit()
     return True
+
+
+# delete
 
 
 def delete_user(*, sess: Session, id: int) -> bool:

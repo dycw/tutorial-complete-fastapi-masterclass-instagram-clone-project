@@ -3,8 +3,8 @@ from hypothesis import given
 from starlette.status import HTTP_200_OK
 
 from app.models.main import UserBase
-from tests.strategies.strategies import clients
-from tests.strategies.user import users_base
+from tests.strategies import clients
+from tests.strategies import users_base
 
 
 # create
