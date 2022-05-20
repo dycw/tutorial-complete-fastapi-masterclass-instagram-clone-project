@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from hypothesis import given
+from hypothesis.strategies import integers
 from sqlalchemy.engine import Engine
 
 from app.models.main import ArticleBase
@@ -33,7 +34,7 @@ def test_clients(client: TestClient) -> None:
 # schemas
 
 
-@given(article=articles_base())
+@given(article=articles_base(creator_id=integers()))
 def test_articles_base(article: ArticleBase) -> None:
     assert isinstance(article, ArticleBase)
 

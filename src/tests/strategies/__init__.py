@@ -2,6 +2,7 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Union
 
+from dycw_utilities.hypothesis import draw_and_flatmap
 from dycw_utilities.hypothesis import draw_and_map
 from dycw_utilities.hypothesis.sqlalchemy import (
     sqlite_engines as _sqlite_engines,
@@ -13,6 +14,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from hypothesis.strategies import SearchStrategy
 from hypothesis.strategies import builds
+from hypothesis.strategies import just
 from hypothesis_faker.strategies import passwords
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
@@ -76,8 +78,13 @@ def clients(
 # schemas
 
 
-def articles_base() -> SearchStrategy[ArticleBase]:
-    return builds(ArticleBase)
+def articles_base(
+    *, creator_id: MaybeSearchStrategy[int]
+) -> SearchStrategy[ArticleBase]:
+    def inner(creator_id: int, /) -> SearchStrategy[ArticleBase]:
+        return builds(ArticleBase, creator_id=just(creator_id))
+
+    return draw_and_flatmap(inner, creator_id)
 
 
 def users_base() -> SearchStrategy[UserBase]:
