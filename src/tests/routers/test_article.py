@@ -21,14 +21,12 @@ def test_post(data: DataObject, client: TestClient, user: UserBase) -> None:
     article = data.draw(articles_base(creator_id=1))
     rpa = client.post("/article/", data=article.json())
     assert rpa.status_code == HTTP_200_OK, rpa.text
-    assert rpa.json() == (
-        {
-            "title": article.title,
-            "content": article.content,
-            "published": article.published,
-            "user": {"id": 1, "username": user.username},
-        }
-    )
+    assert rpa.json() == {
+        "title": article.title,
+        "content": article.content,
+        "published": article.published,
+        "user": {"id": 1, "username": user.username},
+    }
 
     rg = client.get("/article/1")
     assert rg.status_code == HTTP_200_OK, rg.text
