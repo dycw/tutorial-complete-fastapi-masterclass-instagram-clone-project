@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from hypothesis import given
 from hypothesis.strategies import DataObject
 from hypothesis.strategies import data
+from hypothesis.strategies import lists
 from starlette.status import HTTP_200_OK
 
 from app.models.main import UserBase
@@ -36,6 +37,20 @@ def test_post(data: DataObject, client: TestClient, user: UserBase) -> None:
         "published": article.published,
         "user": {"id": 1, "username": user.username},
     }
+
+
+@given(data=data(), client=clients(), user=users_base())
+def test_post_multiple_articles(
+    data: DataObject, client: TestClient, user: UserBase
+) -> None:
+    _ = client.post("/user/", data=user.json())
+
+    articles = data.draw(lists(articles_base(creator_id=1), max_size=10))
+    for article in articles:
+        _ = client.post("/article/", data=article.json())
+
+    rg = client.get("/user/1")
+    assert len(rg.json()["items"]) == len(articles)
 
 
 # read
