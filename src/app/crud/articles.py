@@ -3,13 +3,16 @@ from sqlalchemy.orm import Session
 from starlette.status import HTTP_404_NOT_FOUND
 
 from app.db.schemas.users import DbArticle
+from app.exceptions import StoryException
 from app.models.main import ArticleBase
 
 
 def create_article(*, sess: Session, request: ArticleBase) -> DbArticle:
+    if (req_con := request.content).startswith("Once upon a time"):
+        raise StoryException("No stories please")
     new_article = DbArticle(
         title=request.title,
-        content=request.content,
+        content=req_con,
         published=request.published,
         user_id=request.creator_id,
     )

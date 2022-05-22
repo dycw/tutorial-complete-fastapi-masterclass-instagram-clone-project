@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from typing import Optional
 
 from dycw_utilities.hypothesis import draw_and_flatmap
 from dycw_utilities.hypothesis import draw_and_map
@@ -57,12 +58,20 @@ def clients() -> SearchStrategy[TestClient]:
 
 
 def articles_base(
-    *, creator_id: MaybeSearchStrategy[int]
+    *,
+    content: MaybeSearchStrategy[Optional[str]] = None,
+    creator_id: MaybeSearchStrategy[int],
 ) -> SearchStrategy[ArticleBase]:
-    def inner(creator_id: int, /) -> SearchStrategy[ArticleBase]:
-        return builds(ArticleBase, creator_id=just(creator_id))
+    def inner(
+        content: Optional[str], creator_id: int, /
+    ) -> SearchStrategy[ArticleBase]:
+        return builds(
+            ArticleBase,
+            **({} if content is None else {"content": just(content)}),
+            creator_id=just(creator_id),
+        )
 
-    return draw_and_flatmap(inner, creator_id)
+    return draw_and_flatmap(inner, content, creator_id)
 
 
 def users_base() -> SearchStrategy[UserBase]:

@@ -3,9 +3,11 @@ from hypothesis import given
 from hypothesis.strategies import DataObject
 from hypothesis.strategies import data
 from hypothesis.strategies import lists
+from pytest import raises
 from starlette.status import HTTP_200_OK
 from starlette.status import HTTP_404_NOT_FOUND
 
+from app.exceptions import StoryException
 from app.models.main import UserBase
 from tests.strategies import articles_base
 from tests.strategies import clients
@@ -52,6 +54,17 @@ def test_post_multiple_articles(
 
     rg = client.get("/user/1")
     assert len(rg.json()["items"]) == len(articles)
+
+
+@given(data=data(), client=clients(), user=users_base())
+def test_post_article_error(
+    data: DataObject, client: TestClient, user: UserBase
+) -> None:
+    _ = client.post("/user/", data=user.json())
+
+    article = data.draw(articles_base(content="Once upon a time", creator_id=1))
+    with raises(StoryException):
+        _ = client.post("/article/", data=article.json())
 
 
 # read

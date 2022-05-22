@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from hypothesis import given
+from hypothesis.strategies import DataObject
+from hypothesis.strategies import data
 from hypothesis.strategies import integers
+from hypothesis.strategies import text
 
 from app.models.main import ArticleBase
 from app.models.main import UserBase
@@ -30,6 +33,13 @@ def test_clients(client: TestClient) -> None:
 @given(article=articles_base(creator_id=integers()))
 def test_articles_base(article: ArticleBase) -> None:
     assert isinstance(article, ArticleBase)
+
+
+@given(data=data(), content=text())
+def test_articles_base_with_content(data: DataObject, content: str) -> None:
+    article = data.draw(articles_base(content=content, creator_id=integers()))
+    assert isinstance(article, ArticleBase)
+    assert article.content == content
 
 
 @given(user=users_base())
