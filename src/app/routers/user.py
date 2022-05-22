@@ -1,3 +1,4 @@
+from dycw_utilities.fastapi import APIRouter
 from fastapi.param_functions import Depends
 from sqlalchemy.orm import Session
 
@@ -10,7 +11,6 @@ from app.db.engines import yield_sess
 from app.db.schemas.users import DbUser
 from app.models.main import UserBase
 from app.models.main import UserDisplay
-from app.utilities.routers import APIRouter
 
 
 router = APIRouter(prefix="/user", tags=["user"])

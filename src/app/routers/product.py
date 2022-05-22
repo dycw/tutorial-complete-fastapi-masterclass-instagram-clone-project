@@ -1,4 +1,4 @@
-from app.utilities.routers import APIRouter
+from dycw_utilities.fastapi import APIRouter
 
 
 router = APIRouter(prefix="/product", tags=["product"])
