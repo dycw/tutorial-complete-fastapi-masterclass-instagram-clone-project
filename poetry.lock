@@ -227,7 +227,7 @@ wmi = ["wmi (>=1.5.1,<2.0.0)"]
 
 [[package]]
 name = "dycw-utilities"
-version = "0.1.13"
+version = "0.1.26"
 description = "Miscellaneous Python utilities"
 category = "main"
 optional = false
@@ -1216,7 +1216,7 @@ python-versions = ">=3.6,<4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "2a91963b0ec865b2daa9df1cb24237de67e2199da267c4a4f3a72efe1b24c8fe"
+content-hash = "0ec8700abdd4c0c34654870f864dd5c139b91f87a951b4cb28b417f831409579"
 
 [metadata.files]
 anyio = [
@@ -1412,8 +1412,8 @@ dnspython = [
     {file = "dnspython-2.2.1.tar.gz", hash = "sha256:0f7569a4a6ff151958b64304071d370daa3243d15941a7beedf0c9fe5105603e"},
 ]
 dycw-utilities = [
-    {file = "dycw-utilities-0.1.13.tar.gz", hash = "sha256:6db658f18594031f4d192beda4d54a011af2e7cacc9b39070c6002168539795e"},
-    {file = "dycw_utilities-0.1.13-py3-none-any.whl", hash = "sha256:25d7cd8cbeed3acd9fbb2ca999b1d88f371176098a776ebedaa48475ab1517c9"},
+    {file = "dycw-utilities-0.1.26.tar.gz", hash = "sha256:a01b20ed1e2edb6e54f3b71ee5a0ad1379a6d331ef83ddf2af6b10165bfd5509"},
+    {file = "dycw_utilities-0.1.26-py3-none-any.whl", hash = "sha256:a7abb7455983b46acad7a4f07e721834248c3454c267c10e9f4f5291bb6fbb0c"},
 ]
 email-validator = [
     {file = "email_validator-1.2.1-py2.py3-none-any.whl", hash = "sha256:c8589e691cf73eb99eed8d10ce0e9cbb05a0886ba920c8bcb7c82873f4c5789c"},
