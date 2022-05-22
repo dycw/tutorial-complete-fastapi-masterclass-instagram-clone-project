@@ -1,11 +1,10 @@
 from typing import Any
 
+from dycw_utilities.fastapi import APIRouter
 from fastapi import Body
 from fastapi import Path
 from fastapi import Query
 from pydantic import BaseModel
-
-from app.utilities.routers import APIRouter
 
 
 router = APIRouter(prefix="/blog", tags=["blog"])

@@ -48,7 +48,7 @@ authors = ["Derek Wan <d.wan@icloud.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 bcrypt = "^3.2.2"
-dycw-utilities = "^0.1.26"
+dycw-utilities = "^0.1.27"
 fastapi = "0.78.0"
 gunicorn = "^20.0.4"
 passlib = "^1.7.4"

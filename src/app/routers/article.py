@@ -1,3 +1,4 @@
+from dycw_utilities.fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -7,7 +8,6 @@ from app.db.engines import yield_sess
 from app.db.schemas.users import DbArticle
 from app.models.main import ArticleBase
 from app.models.main import ArticleDisplay
-from app.utilities.routers import APIRouter
 
 
 router = APIRouter(prefix="/article", tags=["article"])

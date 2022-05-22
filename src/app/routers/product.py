@@ -1,0 +1,64 @@
+from dycw_utilities.fastapi import APIRouter
+from fastapi import Response
+from fastapi.responses import HTMLResponse
+from fastapi.responses import PlainTextResponse
+from starlette.status import HTTP_200_OK
+from starlette.status import HTTP_404_NOT_FOUND
+
+
+router = APIRouter(prefix="/product", tags=["product"])
+
+
+products = ["watch", "camera", "phone"]
+
+
+@router.get("/all")
+def _() -> Response:
+    data = " ".join(products)
+    return Response(content=data, media_type="text/plain")
+
+
+@router.get(
+    "/{id}",
+    responses={
+        HTTP_200_OK: {
+            "content": {"text/html": {"example": "<div>Product</div>"}},
+            "description": "Returns the HTML for an object",
+        },
+        HTTP_404_NOT_FOUND: {
+            "content": {"text/plain": {"example": "Product not found"}},
+            "description": "A cleartext error message",
+        },
+    },
+)
+def _(*, id: int) -> Response:
+    try:
+        product = products[id]
+    except IndexError:
+        content = "Product not available"
+        return PlainTextResponse(
+            content=content,
+            status_code=HTTP_404_NOT_FOUND,
+            media_type="text/plain",
+        )
+    else:
+        content = f"""
+        <html>
+          <head>
+            <style>
+            .product {{
+              width: 500px;
+              height: 30px;
+              border: 2px inset green;
+              background-color: lightblue;
+              text-align: center;
+            }}
+            </style>
+          </head>
+
+          <div class="product">
+            {product}
+          </div>
+        </html>
+        """
+        return HTMLResponse(content=content, media_type="text/html")
