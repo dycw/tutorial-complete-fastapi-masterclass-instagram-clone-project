@@ -12,8 +12,10 @@ target-version = ["py310"]
 branch = true
 data_file = ".coverage/data"
 source = ["app"]
+parallel = true
 
 [tool.coverage.report]
+fail_under = 100.0
 skip_covered = true
 skip_empty = true
 
@@ -31,7 +33,6 @@ lines_after_imports = 2
 profile = "black"
 remove_redundant_aliases = true
 skip_glob = ["src/app/db/migrations/*.py"]
-virtual_env = ".venv/bin/python"
 
 #### poetry ###################################################################
 [build-system]
@@ -113,7 +114,11 @@ addopts = [
   "--strict-markers",
   "--typeguard-packages=app"
 ]
-filterwarnings = ["error", "ignore::DeprecationWarning"]
+filterwarnings = [
+  "error",
+  "ignore::DeprecationWarning",
+  "ignore:Implicitly cleaning up <TemporaryDirectory '.*'>:ResourceWarning",
+]
 minversion = "7.0"
 testpaths = ["src/tests"]
 xfail_strict = true

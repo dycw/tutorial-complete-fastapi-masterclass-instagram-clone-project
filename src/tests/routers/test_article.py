@@ -4,6 +4,7 @@ from hypothesis.strategies import DataObject
 from hypothesis.strategies import data
 from hypothesis.strategies import lists
 from starlette.status import HTTP_200_OK
+from starlette.status import HTTP_404_NOT_FOUND
 
 from app.models.main import UserBase
 from tests.strategies import articles_base
@@ -59,5 +60,5 @@ def test_post_multiple_articles(
 @given(client=clients())
 def test_get_detail_non_existent(client: TestClient) -> None:
     r = client.get("/article/1")
-    assert r.status_code == HTTP_200_OK, r.text
-    assert r.json() is None
+    assert r.status_code == HTTP_404_NOT_FOUND, r.text
+    assert r.json() == {"detail": "Article with id 1 not found"}

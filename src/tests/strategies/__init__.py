@@ -1,15 +1,9 @@
 from collections.abc import Iterator
-from pathlib import Path
-from typing import Union
 
 from dycw_utilities.hypothesis import draw_and_flatmap
 from dycw_utilities.hypothesis import draw_and_map
-from dycw_utilities.hypothesis.sqlalchemy import (
-    sqlite_engines as _sqlite_engines,
-)
-from dycw_utilities.hypothesis.tempfile import temp_dirs
+from dycw_utilities.hypothesis.sqlalchemy import sqlite_engines
 from dycw_utilities.hypothesis.typing import MaybeSearchStrategy
-from dycw_utilities.tempfile import TemporaryDirectory
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from hypothesis.strategies import SearchStrategy
@@ -30,21 +24,7 @@ from app.models.main import UserBase
 # generic
 
 
-def sqlite_engines(
-    *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
-) -> SearchStrategy[Engine]:
-    """Strategy for generating SQLAlchemy engines."""
-
-    def post_init(engine: Engine, /) -> None:
-        with engine.begin() as conn:
-            Base.metadata.create_all(bind=conn)
-
-    return _sqlite_engines(dir=dir, post_init=post_init)
-
-
-def apps(
-    *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
-) -> SearchStrategy[FastAPI]:
+def apps() -> SearchStrategy[FastAPI]:
     """Strategy for generating FastAPI applications."""
 
     app = create_app()
@@ -64,15 +44,13 @@ def apps(
         app.dependency_overrides[yield_sess] = yield_test_sess
         return app
 
-    return draw_and_map(inner, sqlite_engines(dir=dir))
+    return draw_and_map(inner, sqlite_engines(base=Base))
 
 
-def clients(
-    *, dir: MaybeSearchStrategy[Union[Path, TemporaryDirectory]] = temp_dirs()
-) -> SearchStrategy[TestClient]:
+def clients() -> SearchStrategy[TestClient]:
     """Strategy for generating Starlette test clients."""
 
-    return apps(dir=dir).map(TestClient)
+    return apps().map(TestClient)
 
 
 # schemas

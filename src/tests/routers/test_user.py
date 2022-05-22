@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 from hypothesis import given
 from starlette.status import HTTP_200_OK
+from starlette.status import HTTP_404_NOT_FOUND
 
 from app.models.main import UserBase
 from tests.strategies import clients
@@ -52,8 +53,8 @@ def test_get_detail_existing(client: TestClient, user: UserBase) -> None:
 @given(client=clients())
 def test_get_detail_non_existent(client: TestClient) -> None:
     r = client.get("/user/1")
-    assert r.status_code == HTTP_200_OK, r.text
-    assert r.json() is None
+    assert r.status_code == HTTP_404_NOT_FOUND, r.text
+    assert r.json() == {"detail": "User with id 1 not found"}
 
 
 # update

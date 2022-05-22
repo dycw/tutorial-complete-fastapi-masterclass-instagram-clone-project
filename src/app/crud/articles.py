@@ -1,4 +1,6 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from starlette.status import HTTP_404_NOT_FOUND
 
 from app.db.schemas.users import DbArticle
 from app.models.main import ArticleBase
@@ -17,5 +19,13 @@ def create_article(*, sess: Session, request: ArticleBase) -> DbArticle:
     return new_article
 
 
-def get_article(*, sess: Session, id: int) -> DbArticle | None:
-    return sess.query(DbArticle).filter(DbArticle.id == id).first()
+def get_article(*, sess: Session, id: int) -> DbArticle:
+    if (
+        article := sess.query(DbArticle).filter(DbArticle.id == id).first()
+    ) is not None:
+        return article
+    else:
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f"Article with id {id} not found",
+        )

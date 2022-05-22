@@ -2,23 +2,16 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from hypothesis import given
 from hypothesis.strategies import integers
-from sqlalchemy.engine import Engine
 
 from app.models.main import ArticleBase
 from app.models.main import UserBase
 from tests.strategies import apps
 from tests.strategies import articles_base
 from tests.strategies import clients
-from tests.strategies import sqlite_engines
 from tests.strategies import users_base
 
 
 # generic
-
-
-@given(engine=sqlite_engines())
-def test_sqlite_engines(engine: Engine) -> None:
-    assert isinstance(engine, Engine)
 
 
 @given(app=apps())
