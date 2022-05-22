@@ -18,11 +18,11 @@ from tests.strategies import users_base
 @given(data=data(), client=clients(), user=users_base())
 def test_post(data: DataObject, client: TestClient, user: UserBase) -> None:
     rpu = client.post("/user/", data=user.json())
-    assert rpu.status_code == HTTP_200_OK, rpu.text
+    assert rpu.status_code == HTTP_200_OK
 
     article = data.draw(articles_base(creator_id=1))
     rpa = client.post("/article/", data=article.json())
-    assert rpa.status_code == HTTP_200_OK, rpa.text
+    assert rpa.status_code == HTTP_200_OK
     assert rpa.json() == {
         "title": article.title,
         "content": article.content,
@@ -31,7 +31,7 @@ def test_post(data: DataObject, client: TestClient, user: UserBase) -> None:
     }
 
     rg = client.get("/article/1")
-    assert rg.status_code == HTTP_200_OK, rg.text
+    assert rg.status_code == HTTP_200_OK
     assert rg.json() == {
         "title": article.title,
         "content": article.content,
@@ -60,5 +60,5 @@ def test_post_multiple_articles(
 @given(client=clients())
 def test_get_detail_non_existent(client: TestClient) -> None:
     r = client.get("/article/1")
-    assert r.status_code == HTTP_404_NOT_FOUND, r.text
+    assert r.status_code == HTTP_404_NOT_FOUND
     assert r.json() == {"detail": "Article with id 1 not found"}

@@ -14,7 +14,7 @@ from tests.strategies import users_base
 @given(client=clients(), user=users_base())
 def test_post(client: TestClient, user: UserBase) -> None:
     rp = client.post("/user/", data=user.json())
-    assert rp.status_code == HTTP_200_OK, rp.text
+    assert rp.status_code == HTTP_200_OK
     assert rp.json() == {
         "username": user.username,
         "email": user.email,
@@ -22,7 +22,7 @@ def test_post(client: TestClient, user: UserBase) -> None:
     }
 
     rg = client.get("/user/")
-    assert rg.status_code == HTTP_200_OK, rg.text
+    assert rg.status_code == HTTP_200_OK
     assert rg.json() == [
         {"username": user.username, "email": user.email, "items": []}
     ]
@@ -34,7 +34,7 @@ def test_post(client: TestClient, user: UserBase) -> None:
 @given(client=clients())
 def test_get(client: TestClient) -> None:
     r = client.get("/user/")
-    assert r.status_code == HTTP_200_OK, r.text
+    assert r.status_code == HTTP_200_OK
     assert r.json() == []
 
 
@@ -42,7 +42,7 @@ def test_get(client: TestClient) -> None:
 def test_get_detail_existing(client: TestClient, user: UserBase) -> None:
     _ = client.post("/user/", data=user.json())
     r = client.get("/user/1")
-    assert r.status_code == HTTP_200_OK, r.text
+    assert r.status_code == HTTP_200_OK
     assert r.json() == {
         "username": user.username,
         "email": user.email,
@@ -53,7 +53,7 @@ def test_get_detail_existing(client: TestClient, user: UserBase) -> None:
 @given(client=clients())
 def test_get_detail_non_existent(client: TestClient) -> None:
     r = client.get("/user/1")
-    assert r.status_code == HTTP_404_NOT_FOUND, r.text
+    assert r.status_code == HTTP_404_NOT_FOUND
     assert r.json() == {"detail": "User with id 1 not found"}
 
 
@@ -72,6 +72,13 @@ def test_update(client: TestClient, first: UserBase, second: UserBase) -> None:
     }
 
 
+@given(client=clients())
+def test_update_non_existent(client: TestClient) -> None:
+    r = client.post("/user/update/1")
+    assert r.status_code == HTTP_404_NOT_FOUND
+    assert r.json() == {"detail": "Not Found"}
+
+
 # delete
 
 
@@ -80,3 +87,10 @@ def test_delete(client: TestClient, user: UserBase) -> None:
     _ = client.post("/user/", data=user.json())
     r = client.post("/user/delete/1")
     assert r.json() is True
+
+
+@given(client=clients())
+def test_delete_non_existent(client: TestClient) -> None:
+    r = client.post("/user/delete/1")
+    assert r.status_code == HTTP_404_NOT_FOUND
+    assert r.json() == {"detail": "User with id 1 not found"}
