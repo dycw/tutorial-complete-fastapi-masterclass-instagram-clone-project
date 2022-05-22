@@ -16,14 +16,14 @@ def create_app() -> FastAPI:
     app.include_router(article.router)
     app.include_router(blog_get.router)
     app.include_router(blog_post.router)
-
-    @app.exception_handler(StoryException)  # type: ignore
-    def _(_: Request, exc: StoryException) -> JSONResponse:
-        return JSONResponse(
-            status_code=HTTP_418_IM_A_TEAPOT, content={"detail": exc.name}
-        )
-
+    app.exception_handler(StoryException)(_handle_story_exception)
     return app
+
+
+def _handle_story_exception(_: Request, exc: StoryException) -> JSONResponse:
+    return JSONResponse(
+        status_code=HTTP_418_IM_A_TEAPOT, content={"detail": exc.name}
+    )
 
 
 app = create_app()
