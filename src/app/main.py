@@ -1,6 +1,9 @@
 from fastapi import FastAPI
+from fastapi import HTTPException
 from fastapi import Request
 from fastapi.responses import JSONResponse
+from fastapi.responses import PlainTextResponse
+from starlette.status import HTTP_400_BAD_REQUEST
 from starlette.status import HTTP_418_IM_A_TEAPOT
 
 from app.exceptions import StoryException
@@ -20,9 +23,15 @@ def create_app() -> FastAPI:
     return app
 
 
+def _handle_http_exception(  # type: ignore
+    _: Request, exc: HTTPException
+) -> PlainTextResponse:
+    return PlainTextResponse(content=str(exc), status_code=HTTP_400_BAD_REQUEST)
+
+
 def _handle_story_exception(_: Request, exc: StoryException) -> JSONResponse:
     return JSONResponse(
-        status_code=HTTP_418_IM_A_TEAPOT, content={"detail": exc.name}
+        content={"detail": exc.name}, status_code=HTTP_418_IM_A_TEAPOT
     )
 
 
