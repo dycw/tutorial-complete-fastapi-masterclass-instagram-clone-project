@@ -28,7 +28,7 @@ def _(
     custom_header: Optional[str] = Header(None),
     custom_headers: Optional[list[str]] = Header(None),
 ) -> list[str]:
-    _ = custom_header, custom_headers
+    _ = custom_header
     if custom_headers is not None:
         response.headers["custom_response_header"] = ",".join(custom_headers)
     return products
