@@ -3,6 +3,7 @@ from typing import Optional
 
 from dycw_utilities.fastapi import APIRouter
 from fastapi import Cookie
+from fastapi import Form
 from fastapi import Header
 from fastapi import Response
 from fastapi.responses import HTMLResponse
@@ -86,3 +87,9 @@ def _(*, id: int) -> Response:
         </html>
         """
         return HTMLResponse(content=content, media_type="text/html")
+
+
+@router.post("/new")
+def create_product(name: str = Form(...)) -> list[str]:
+    products.append(name)
+    return products
