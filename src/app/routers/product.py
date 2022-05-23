@@ -1,4 +1,7 @@
+from typing import Optional
+
 from dycw_utilities.fastapi import APIRouter
+from fastapi import Header
 from fastapi import Response
 from fastapi.responses import HTMLResponse
 from fastapi.responses import PlainTextResponse
@@ -16,6 +19,19 @@ products = ["watch", "camera", "phone"]
 def _() -> Response:
     data = " ".join(products)
     return Response(content=data, media_type="text/plain")
+
+
+@router.get("/withheader")
+def _(
+    *,
+    response: Response,
+    custom_header: Optional[str] = Header(None),
+    custom_headers: Optional[list[str]] = Header(None),
+) -> list[str]:
+    _ = custom_header, custom_headers
+    if custom_headers is not None:
+        response.headers["custom_response_header"] = ",".join(custom_headers)
+    return products
 
 
 @router.get(
