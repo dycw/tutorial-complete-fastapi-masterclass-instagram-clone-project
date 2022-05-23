@@ -1,6 +1,8 @@
+from typing import Any
 from typing import Optional
 
 from dycw_utilities.fastapi import APIRouter
+from fastapi import Cookie
 from fastapi import Header
 from fastapi import Response
 from fastapi.responses import HTMLResponse
@@ -18,7 +20,9 @@ products = ["watch", "camera", "phone"]
 @router.get("/all")
 def _() -> Response:
     data = " ".join(products)
-    return Response(content=data, media_type="text/plain")
+    response = Response(content=data, media_type="text/plain")
+    response.set_cookie(key="test_cookie", value="test_cookie_value")
+    return response
 
 
 @router.get("/withheader")
@@ -27,11 +31,15 @@ def _(
     response: Response,
     custom_header: Optional[str] = Header(None),
     custom_headers: Optional[list[str]] = Header(None),
-) -> list[str]:
-    _ = custom_header
+    test_cookie: Optional[str] = Cookie(None),
+) -> dict[str, Any]:
     if custom_headers is not None:
         response.headers["custom_response_header"] = ",".join(custom_headers)
-    return products
+    return {
+        "data": products,
+        "custom_header": custom_header,
+        "my_cookie": test_cookie,
+    }
 
 
 @router.get(

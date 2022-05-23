@@ -16,6 +16,7 @@ def test_all(client: TestClient) -> None:
     r = client.get("/product/all")
     assert r.status_code == HTTP_200_OK
     assert r.text == "watch camera phone"
+    assert r.cookies["test_cookie"] == "test_cookie_value"
 
 
 @given(client=clients(), header=text_clean(), headers=lists(text_clean()))
@@ -30,6 +31,16 @@ def test_with_header(
     assert r.headers["custom_response_header"] == ",".join(headers)
     assert r.request.headers["custom-header"] == header
     assert r.request.headers["custom-headers"] == ",".join(headers)
+
+
+@given(client=clients())
+def test_with_header_reads_cookie(client: TestClient) -> None:
+    r = client.get("/product/withheader")
+    assert r.json()["my_cookie"] is None
+
+    _ = client.get("/product/all")
+    r = client.get("/product/withheader")
+    assert r.json()["my_cookie"] == "test_cookie_value"
 
 
 @given(client=clients())
