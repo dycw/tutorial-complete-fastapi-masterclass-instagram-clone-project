@@ -1,11 +1,10 @@
 from re import DOTALL
 from re import search
 
+from dycw_utilities.hypothesis import text_clean
 from fastapi.testclient import TestClient
 from hypothesis import given
-from hypothesis.strategies import characters
 from hypothesis.strategies import lists
-from hypothesis.strategies import text
 from starlette.status import HTTP_200_OK
 from starlette.status import HTTP_404_NOT_FOUND
 
@@ -19,11 +18,7 @@ def test_all(client: TestClient) -> None:
     assert r.text == "watch camera phone"
 
 
-@given(
-    client=clients(),
-    header=text(characters(blacklist_categories=["Z", "C"])),
-    headers=lists(text(characters(blacklist_categories=["C"]))),
-)
+@given(client=clients(), header=text_clean(), headers=lists(text_clean()))
 def test_with_header(
     client: TestClient, header: str, headers: list[str]
 ) -> None:
