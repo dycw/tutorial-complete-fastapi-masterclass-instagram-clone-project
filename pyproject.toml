@@ -48,7 +48,7 @@ authors = ["Derek Wan <d.wan@icloud.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 bcrypt = "^3.2.2"
-dycw-utilities = "^0.1.27"
+dycw-utilities = "^0.1.28"
 fastapi = "0.78.0"
 gunicorn = "^20.0.4"
 passlib = "^1.7.4"
@@ -60,7 +60,7 @@ uvicorn = { version = "^0.17.6", extras = ["standard"] }
 [tool.poetry.dev-dependencies]
 autoflake = "^1.4"
 black = "^22.3.0"
-coverage = { version = "^6.3.3", extras = ["toml"] }
+coverage = { version = "^6.4.0", extras = ["toml"] }
 flake8-absolute-import = "^1.0.0.1"
 flake8-annotations = "^2.9.0"
 flake8-bandit = "^3.0.0"
