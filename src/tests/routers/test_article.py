@@ -4,7 +4,7 @@ from hypothesis.strategies import DataObject
 from hypothesis.strategies import data
 from hypothesis.strategies import lists
 from starlette.status import HTTP_200_OK
-from starlette.status import HTTP_404_NOT_FOUND
+from starlette.status import HTTP_401_UNAUTHORIZED
 from starlette.status import HTTP_418_IM_A_TEAPOT
 
 from app.models.main import UserBase
@@ -73,5 +73,5 @@ def test_post_article_error(
 @given(client=clients())
 def test_get_detail_non_existent(client: TestClient) -> None:
     r = client.get("/article/1")
-    assert r.status_code == HTTP_404_NOT_FOUND
-    assert r.json() == {"detail": "Article with id 1 not found"}
+    assert r.status_code == HTTP_401_UNAUTHORIZED
+    assert r.json() == {"detail": "Not authenticated"}

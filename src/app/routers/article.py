@@ -2,6 +2,7 @@ from dycw_utilities.fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from app.auth.oauth2 import oauth2_scheme
 from app.crud.articles import create_article
 from app.crud.articles import get_article
 from app.db.engines import yield_sess
@@ -27,5 +28,10 @@ def _(
 
 
 @router.get("/{id}", response_model=ArticleDisplay)
-def _(*, sess: Session = Depends(yield_sess), id: int) -> DbArticle | None:
+def _(
+    *,
+    sess: Session = Depends(yield_sess),
+    id: int,
+    token: str = Depends(oauth2_scheme),
+) -> DbArticle | None:
     return get_article(sess=sess, id=id)

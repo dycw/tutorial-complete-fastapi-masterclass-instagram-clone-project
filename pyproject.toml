@@ -53,6 +53,7 @@ fastapi = "0.78.0"
 gunicorn = "^20.0.4"
 passlib = "^1.7.4"
 pydantic = { version = "^1.9.1", extras = ["email"] }
+python-jose = "^3.3.0"
 python-multipart = "^0.0.5"
 sqlalchemy = "^1.4.36"
 strenum = "^0.4.7"
