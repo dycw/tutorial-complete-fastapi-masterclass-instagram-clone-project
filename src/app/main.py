@@ -7,6 +7,7 @@ from fastapi.responses import PlainTextResponse
 from starlette.status import HTTP_400_BAD_REQUEST
 from starlette.status import HTTP_418_IM_A_TEAPOT
 
+from app.auth import authentication
 from app.exceptions import StoryException
 from app.routers import article
 from app.routers import blog_get
@@ -17,6 +18,7 @@ from app.routers import user
 
 def create_app() -> FastAPI:
     app = FastAPI()
+    app.include_router(authentication.router)
     app.include_router(article.router)
     app.include_router(blog_get.router)
     app.include_router(blog_post.router)

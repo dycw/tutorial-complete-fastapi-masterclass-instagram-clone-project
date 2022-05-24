@@ -11,7 +11,7 @@ SessionLocal = sessionmaker(
 )
 
 
-def yield_sess() -> Iterator[Session]:  # pragma: no cover
+def yield_sess() -> Iterator[Session]:
     db = SessionLocal()
     try:
         yield db
