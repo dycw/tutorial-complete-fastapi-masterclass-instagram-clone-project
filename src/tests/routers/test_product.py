@@ -1,3 +1,4 @@
+from json import dumps
 from re import DOTALL
 from re import search
 
@@ -5,6 +6,7 @@ from dycw_utilities.hypothesis import text_clean
 from fastapi.testclient import TestClient
 from hypothesis import given
 from hypothesis.strategies import lists
+from pytest import mark
 from starlette.status import HTTP_200_OK
 from starlette.status import HTTP_404_NOT_FOUND
 
@@ -55,3 +57,10 @@ def test_detail_non_existent(client: TestClient) -> None:
     r = client.get("/product/3")
     assert r.status_code == HTTP_404_NOT_FOUND
     assert r.text == "Product not available"
+
+
+@given(client=clients())
+@mark.skip(reason="Learn how to post form data")
+def test_new(client: TestClient) -> None:
+    r = client.post("/product/new", data=dumps("laptop"))
+    assert r.status_code == HTTP_200_OK
